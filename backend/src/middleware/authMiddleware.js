@@ -4,24 +4,18 @@ function authMiddleware(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
-        message: "Authorization header missing",
+        message: "Authorization token missing",
       });
     }
 
     const token = authHeader.split(" ")[1];
 
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "Token missing",
-      });
-    }
-
     const decoded = verifyToken(token);
 
+    // Attach user info to request
     req.user = {
       userId: decoded.userId,
       tenantId: decoded.tenantId,

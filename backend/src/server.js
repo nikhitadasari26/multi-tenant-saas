@@ -1,11 +1,20 @@
-require("dotenv").config();
 const express = require("express");
+const app = express();
+require("dotenv").config();
 const cors = require("cors");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const pool = require("./config/db"); // ✅ correct
 const authRoutes = require("./routes/authRoutes");
+const protectedRoutes = require("./routes/protectedRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
-const app = express();
+const taskRoutes = require("./routes/taskRoutes");
+const projectRoutes = require("./routes/projectRoutes");
+
+
 
 // Middleware
 app.use(
@@ -15,10 +24,19 @@ app.use(
   })
 );
 
-app.use(express.json());
+
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api", protectedRoutes);
+app.use("/api", adminRoutes);
+app.use("/api", taskRoutes);
+app.use("/api/projects", projectRoutes);
+
+
+
+
+
 
 // Health check
 app.get("/api/health", async (req, res) => {

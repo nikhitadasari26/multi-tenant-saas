@@ -1,16 +1,20 @@
 -- Purpose: Create tenants table for multi-tenant SaaS
 
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 CREATE TABLE IF NOT EXISTS tenants (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(255) NOT NULL,
-    subdomain VARCHAR(100) NOT NULL UNIQUE,
-    status VARCHAR(20) NOT NULL DEFAULT 'active',
-    subscription_plan VARCHAR(20) NOT NULL DEFAULT 'free',
-    max_users INTEGER NOT NULL DEFAULT 5,
-    max_projects INTEGER NOT NULL DEFAULT 3,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR NOT NULL,
+  subdomain VARCHAR UNIQUE NOT NULL,
+  status VARCHAR DEFAULT 'active'
+    CHECK (status IN ('active', 'suspended', 'trial')),
+  subscription_plan VARCHAR DEFAULT 'free'
+    CHECK (subscription_plan IN ('free', 'pro', 'enterprise')),
+  max_users INT DEFAULT 5,
+  max_projects INT DEFAULT 3,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Index for faster tenant lookup
-CREATE INDEX IF NOT EXISTS idx_tenants_subdomain ON tenants(subdomain);
+CREATE INDEX IF NOT EXISTS idx_tenants_subdomain
+ON tenants(subdomain);

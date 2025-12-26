@@ -29,6 +29,7 @@ It supports tenant isolation, role-based access control (RBAC), subscription lim
 
 ---
 
+
 ## Project Structure
 
 multi-tenant-saas/
@@ -54,6 +55,18 @@ multi-tenant-saas/
 └── submission.json
 
 ---
+
+## Demo Login Credentials
+
+Tenant Subdomain: demo  
+Admin Email: admin@demo.com  
+Admin Password: Demo@123  
+
+Login API:
+POST http://localhost:5000/api/auth/login
+
+---
+
 
 ## Subscription Plans
 

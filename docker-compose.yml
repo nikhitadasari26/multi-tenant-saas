@@ -30,6 +30,7 @@ services:
       DB_NAME: saas_db
       DB_USER: postgres
       DB_PASSWORD: postgres
+      PGPASSWORD: postgres
     ports:
       - "5000:5000"
     depends_on:
